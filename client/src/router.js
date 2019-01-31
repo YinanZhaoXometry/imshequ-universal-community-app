@@ -13,37 +13,37 @@ export default new Router({
       children: [
         {
           path: '',
-          name: 'home-all',
+          name: 'all',
           component: () => import('@/views/HomeArticleList')
         },
         {
-          path: 'my-feed',
-          name: 'home-my-feed',
+          path: 'myfeed',
+          name: 'feed',
           component: () => import('@/views/HomeArticleList')
         },
-        {
-          path: 'nodejs',
-          name: 'home-nodejs',
-          component: () => import('@/views/HomeArticleList')
-        },
-        {
-          path: 'react',
-          name: 'home-react',
-          component: () => import('@/views/HomeArticleList')
-        },
-        {
-          path: 'vue',
-          name: 'home-vue',
-          component: () => import('@/views/HomeArticleList')
-        },
-        {
-          path: 'questions',
-          name: 'home-questions'
-        },
-        {
-          path: 'jobs',
-          name: 'home-jobs'
-        }
+        // {
+        //   path: 'nodejs',
+        //   name: 'home-nodejs',
+        //   component: () => import('@/views/HomeArticleList')
+        // },
+        // {
+        //   path: 'react',
+        //   name: 'home-react',
+        //   component: () => import('@/views/HomeArticleList')
+        // },
+        // {
+        //   path: 'vue',
+        //   name: 'home-vue',
+        //   component: () => import('@/views/HomeArticleList')
+        // },
+        // {
+        //   path: 'questions',
+        //   name: 'home-questions'
+        // },
+        // {
+        //   path: 'jobs',
+        //   name: 'home-jobs'
+        // }
       ]
     }
   ]
