@@ -19,6 +19,7 @@ import Pagination from '@/components/ArticlePagination'
 import { mapState } from 'vuex'
 
 export default {
+  name: 'HomeArticleList',
   components: {
     ArticleCard,
     Pagination

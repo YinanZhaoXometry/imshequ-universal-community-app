@@ -10,7 +10,7 @@
       </div>
     </div>
     <!-- 文章标题和简介 -->
-    <router-link to="/">
+    <router-link :to="`/article/${article.slug}`">
       <h1>{{ article.title }}</h1>
       <p>{{ article.description }}</p>
       <span>Read more...</span>

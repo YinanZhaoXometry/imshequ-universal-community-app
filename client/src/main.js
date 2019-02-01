@@ -5,6 +5,11 @@ import store from './store/'
 
 Vue.config.productionTip = false
 
+router.beforeEach(async (to, from, next) => {
+  await store.dispatch('CHECK_AUTH')
+  next()
+})
+
 new Vue({
   router,
   store,

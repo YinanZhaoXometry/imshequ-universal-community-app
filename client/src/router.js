@@ -45,6 +45,26 @@ export default new Router({
         //   name: 'home-jobs'
         // }
       ]
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('@/views/Login')
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('@/views/Register')
+    },
+    {
+      path: '/write',
+      name: 'article-write',
+      component: () => import('@/views/ArticleWrite')
+    },
+    {
+      path: '/article/:slug',
+      name: 'article',
+      component: () => import('@/views/Article')
     }
   ]
 })
