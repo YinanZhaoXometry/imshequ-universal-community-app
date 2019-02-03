@@ -3,6 +3,17 @@
     <!-- 标题区域 -->
     <div>
       <h1>{{ article.title }}</h1>
+      <div>
+        <img :src="article.author.image" alt="author avatar">
+        <router-link 
+          :to="{name: 'user-articles', params: {username: article.author.username}}"
+        >
+          {{ article.author.username }}
+        </router-link>
+        <br>
+        <span>{{ article.createdAt }}</span>
+      </div>
+      <button>+ Follow {{ article.author.username }}</button>
     </div>
     <!-- 文章正文区域 -->
     <div>

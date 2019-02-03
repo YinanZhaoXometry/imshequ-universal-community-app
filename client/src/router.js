@@ -14,12 +14,12 @@ export default new Router({
         {
           path: '',
           name: 'all',
-          component: () => import('@/views/HomeArticleList')
+          component: () => import('@/views/HomeTabs')
         },
         {
           path: 'myfeed',
           name: 'feed',
-          component: () => import('@/views/HomeArticleList')
+          component: () => import('@/views/HomeTabs')
         },
         // {
         //   path: 'nodejs',
@@ -65,6 +65,27 @@ export default new Router({
       path: '/article/:slug',
       name: 'article',
       component: () => import('@/views/Article')
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: () => import('@/views/Settings')
+    },
+    {
+      path: '/u/:username',
+      component: () => import('@/views/User'),
+      children: [
+        {
+          path: '',
+          name: 'user-articles',
+          component: () => import('@/views/UserTabs')
+        },
+        {
+          path: 'favorites',
+          name: 'user-favorites',
+          component: () => import('@/views/UserTabs')
+        }
+      ]
     }
   ]
 })

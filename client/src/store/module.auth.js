@@ -10,7 +10,7 @@ const state = {
 const getters = {
   isAuthenticated (state) {
     return state.isAuthenticated
-  }
+  },
 }
 const mutations = {
   SET_AUTH (state, user) {
@@ -70,6 +70,19 @@ const actions = {
     } else {
       commit('CLEAR_AUTH')
     }
+  },
+  UPDATE_USER ({commit}, updatedUser) {
+    const {email, username, password, image, bio} = updatedUser
+    let user = {
+      email,
+      username,
+      image,
+      bio
+    }
+    if (password) user.password = password
+    return $axios.put('/user', user).then(({data}) => {
+      commit('SET_AUTH', data.user)
+    })
   }
 }
 

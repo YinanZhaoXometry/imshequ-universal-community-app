@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import ArticleCard from '@/components/ArticleCard'
-import Pagination from '@/components/ArticlePagination'
+import ArticleCard from '@/components/ArticleListCard.vue'
+import Pagination from '@/components/ArticleListPagination.vue'
 import { mapState } from 'vuex'
 
 export default {
@@ -30,6 +30,10 @@ export default {
       type: Number,
       required: false,
       default: 10
+    },
+    author: {
+      type: String,
+      required: false
     }
   },
 
@@ -45,6 +49,7 @@ export default {
         offset: (this.currentPage - 1) * this.itemsPerPage,
         limit: this.itemsPerPage
       }
+      if (this.author) filters.author = this.author
       return {
         type: this.$route.name,
         filters
@@ -71,7 +76,7 @@ export default {
     }
   },
 
-  mounted () {
+  created () {
     this.fetchArticles()
   },
 

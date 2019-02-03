@@ -1,12 +1,13 @@
 <template>
   <nav class="clearfix">
-    <router-link class="site-logo" to="/">i‘m 社区 {{isAuthenticated}}</router-link>
+    <router-link class="site-logo" to="/">i‘m 社区</router-link>
     <ul class="nav">
       <template v-if="isAuthenticated">
          <li><router-link to="/" @click.prevent.native="logout">退出登录</router-link> </li>
-        <li><router-link to="/user">用户名</router-link> </li>
+        <li><router-link :to="`/u/${currentUser.username}`">{{ currentUser.username }}</router-link> </li>
         <li><router-link to="/settings">设置</router-link> </li>
         <li><router-link to="/write">写文章</router-link> </li>
+        <li><router-link to="/">首页</router-link> </li>
       </template>
       <template v-else>
         <li><router-link to="/">首页</router-link> </li>
@@ -19,11 +20,14 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 export default {
   name: 'Header',
   computed: {
-    ...mapGetters(['isAuthenticated'])
+    ...mapGetters(['isAuthenticated']),
+    ...mapState({
+      currentUser: state => state.auth.user
+    })
   },
   methods: {
     logout () {

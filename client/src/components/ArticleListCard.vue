@@ -2,9 +2,13 @@
   <div>
     <!-- 作者信息 -->
     <div>
-      <img :src="article.author.image" alt="author avatar">
       <div>
-        {{ article.author.username }}
+        <img :src="article.author.image" alt="author avatar">
+        <router-link 
+          :to="{name: 'user-articles', params: {username: article.author.username}}"
+        >
+          {{ article.author.username }}
+        </router-link>
         <br>
         <span>{{ article.createdAt }}</span>
       </div>
