@@ -7,7 +7,7 @@
     <div>
       <div>
         <ul class="nav-tabs clearfix">
-          <li v-if="isAuthenticated"><router-link to="/my-feed">我的订阅</router-link></li>
+          <li v-if="isAuthenticated"><router-link to="/myfeed">我的订阅</router-link></li>
           <li><router-link to="/">全部</router-link></li>
           <!-- <li><router-link to="/nodejs">nodejs</router-link></li>
           <li><router-link to="/vue">Vue</router-link></li>

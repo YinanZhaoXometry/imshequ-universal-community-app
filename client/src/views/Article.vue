@@ -13,7 +13,23 @@
         <br>
         <span>{{ article.createdAt }}</span>
       </div>
-      <button>+ Follow {{ article.author.username }}</button>
+      <div>
+        <button @click="toggleFollow">
+          {{ profile.following ? "Unfollow" : "Follow" }}
+          {{ article.author.username }}
+        </button>
+      </div>
+      <div>
+        <button @click="toggleFavorite">
+          <span>
+            {{ article.favorited ? "取消点赞" : "赞" }}
+          </span>
+          <span>
+            ({{ article.favoritesCount }})
+          </span>
+          
+        </button>
+      </div>
     </div>
     <!-- 文章正文区域 -->
     <div>
@@ -23,39 +39,60 @@
       </ul>
     </div>
     <!-- 评论区域 -->
-    <div>
-      <form @submit.prevent="onSubmitComment" v-if="isAuthenticated">
-        <textarea cols="30" rows="6"></textarea>
-        <button type="submit">发送</button>
-      </form>
-      <p v-else>
-        添加评论需先 
-        <router-link to="/login">登陆</router-link> 
-        或
-        <router-link to="/register">注册</router-link> 
-      </p>
-      <div v-for="(comment, index) in comments" :key="index">{{ comment }}</div>
-    </div>
+    <comment 
+      :comments="comments"
+      :slug="article.slug"
+    />
   </div>  
 </template>
 
 <script>
 import store from '@/store'
 import { mapState, mapGetters } from 'vuex'
+import Comment from '@/components/Comment.vue'
 export default {
+  name: 'Article',
+  components: {
+    Comment
+  },
   beforeRouteEnter (to, from, next) {
     Promise.all([
       store.dispatch('ARTICLE_FETCH', { articleSlug: to.params.slug }),
       store.dispatch('COMMENTS_FETCH', to.params.slug)
-    ]).then(() => next())
+    ]).then(([article]) => {
+      store.dispatch('FETCH_PROFILE', {username: article.author.username})
+      next()
+    })
   },
   computed: {
     ...mapState({
       article: state => state.article.article,
-      comments: state => state.article.comments
+      comments: state => state.article.comments,
+      profile: state => state.profile.profile
     }),
-    ...mapGetters(['isAuthenticated'])
-  }
+    ...mapGetters(['isAuthenticated']),
+  },
+  methods: {
+    toggleFollow () {
+      if (!this.isAuthenticated) {
+        return this.$router.push('/login')
+      }
+      const actionType = this.profile.following
+        ? 'FETCH_PROFILE_UNFOLLOW'
+        : 'FETCH_PROFILE_FOLLOW'
+      this.$store.dispatch(actionType, {
+        username: this.article.author.username
+      })
+    },
+    toggleFavorite () {
+      if (!this.isAuthenticated) {
+        return this.$router.push('/login')
+      }
+      const actionType = this.article.favorited ? 'FAVORITE_REMOVE' : 'FAVORITE_ADD'
+      this.$store.dispatch(actionType, this.article.slug)
+    }
+  },
+  
 }
 </script>
 

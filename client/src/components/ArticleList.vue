@@ -2,6 +2,9 @@
   <div>
     <div v-if="isLoading">Loading articles...</div>
     <div v-else>
+      <div v-if="articles.length === 0">
+        暂无文章
+      </div>
       <article-card 
         v-for="(article, index) in articles" 
         :key="article.title + index" 
@@ -31,6 +34,11 @@ export default {
       required: false,
       default: 10
     },
+    type: {
+      type: String,
+      required: false,
+      default: 'all'
+    },
     author: {
       type: String,
       required: false
@@ -51,7 +59,7 @@ export default {
       }
       if (this.author) filters.author = this.author
       return {
-        type: this.$route.name,
+        type: this.type,
         filters
       }
     },
@@ -66,26 +74,23 @@ export default {
       }
       return [
         ...Array(Math.ceil(this.articlesCount / this.itemsPerPage)).keys()
-        ].map(e => e+1)
+      ].map(e => e+1)
     }
   },
 
   watch: {
     currentPage () {
-      this.fetchArticles();
-    }
+      this.fetchArticles()
+    },
   },
-
-  created () {
-    this.fetchArticles()
-  },
-
   methods: {
     fetchArticles () {
       this.$store.dispatch('FETCH_ARTICLES', this.listConfig)
     }
-  }
-  
+  },
+  created () {
+    this.fetchArticles()
+  },
 }
 </script>
 

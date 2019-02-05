@@ -14,12 +14,12 @@ export default new Router({
         {
           path: '',
           name: 'all',
-          component: () => import('@/views/HomeTabs')
+          component: () => import('@/views/HomeAll')
         },
         {
           path: 'myfeed',
           name: 'feed',
-          component: () => import('@/views/HomeTabs')
+          component: () => import('@/views/HomeMyFeed')
         },
         // {
         //   path: 'nodejs',

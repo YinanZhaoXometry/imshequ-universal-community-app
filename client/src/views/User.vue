@@ -6,7 +6,8 @@
       <h4>{{ profile.username }}</h4>
       <p>{{ profile.bio }}</p>
       <div v-if="!isCurrentUser">
-        <button>Follow {{ profile.username }}</button>
+        <button @click="unfollow" v-if="profile.following">Unfollow {{ profile.username }}</button>
+        <button @click="follow" v-else>Follow {{ profile.username }}</button>
       </div>
     </div>
     <!-- 导航标签区域 -->
@@ -22,7 +23,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 export default {
   name: 'User',
   computed: {
@@ -30,6 +31,7 @@ export default {
       profile: state => state.profile.profile,
       user: state => state.auth.user
     }),
+    ...mapGetters(['isAuthenticated']),
     isCurrentUser () {
       if (this.user.username) {
         return this.user.username === this.profile.username
@@ -37,9 +39,24 @@ export default {
       return false
     }
   },
+  methods: {
+    follow () {
+      if (!this.isAuthenticated) return 
+      this.$store.dispatch('FETCH_PROFILE_FOLLOW', this.$route.params)
+    },
+    unfollow () {
+      this.$store.dispatch('FETCH_PROFILE_UNFOLLOW', this.$route.params)
+    }
+  },
+  watch: {
+    $route (to) {
+      console.log(to)
+    }
+  },
   created () {
     this.$store.dispatch('FETCH_PROFILE', this.$route.params)
   },
+
 }
 </script>
 
