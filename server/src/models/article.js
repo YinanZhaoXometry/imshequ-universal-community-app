@@ -2,7 +2,7 @@
 const mongoose = require('mongoose')
 
 const ArticleSchema = new mongoose.Schema({
-  slug: { type: String, lowercase: true, unique: true },
+  // slug: { type: String, lowercase: true, unique: true },
   title: String,
   description: String,
   body: String,
@@ -19,4 +19,4 @@ const ArticleSchema = new mongoose.Schema({
 })
 
 const Article = mongoose.model('Article', ArticleSchema)
-export default Article
+module.exports = Article

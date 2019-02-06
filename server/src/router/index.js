@@ -1,26 +1,34 @@
 const router = require('express').Router()
+const user = require('../controllers/user')
+
+const auth  = require('../middlewares/auth')
 
 
 router
-    .get('/user')
-    .put('/user')
-    .post('/users/login')
-    .post('/users')
+    // sign相关
+    .post('/users/signup', user.signup)
+    .post('/users/signin', user.signin)
 
-    .get('/articles')
-    .get('/articles/feed')
-    .post('/articles')
-    .get('/articles/:article')
-    .put('/articles/:article')
-    .delete('/articles/:article')
-    .post('/articles/:article/favorite')
-    .delete('/articles/:article/favorite')
-    .get('/articles/:article/comments')
-    .post('/articles/:article/comments')
-    .delete('/articles/:article/comments/:comment')
+    .get('/users/auth', auth.authUser)
+    // .get('/user')
+    // .put('/user')
 
-    .get('/profiles/:username')
-    .post('/profiles/:username/follow')
-    .delete('/profiles/:username/follow')
+    // .get('/articles')
+    // .get('/articles/feed')
+    // .post('/articles')
+    // .get('/articles/:article')
+    // .put('/articles/:article')
+    // .delete('/articles/:article')
+    // .post('/articles/:article/favorite')
+    // .delete('/articles/:article/favorite')
+    // .get('/articles/:article/comments')
+    // .post('/articles/:article/comments')
+    // .delete('/articles/:article/comments/:comment')
 
-    .get('/tags')
+    // .get('/profiles/:username')
+    // .post('/profiles/:username/follow')
+    // .delete('/profiles/:username/follow')
+
+    // .get('/tags')
+
+module.exports = router

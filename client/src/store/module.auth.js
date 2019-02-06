@@ -16,7 +16,8 @@ const mutations = {
   SET_AUTH (state, user) {
     state.user = user
     state.isAuthenticated = true
-    window.localStorage.setItem(TOKEN_ID, user.token)
+    if(user.token) 
+      window.localStorage.setItem(TOKEN_ID, user.token)
   },
   CLEAR_AUTH (state) {
     state.isAuthenticated = false
@@ -30,28 +31,27 @@ const mutations = {
 
 }
 const actions = {
-  LOGIN ({commit}, credentials) {
+  SIGNIN ({commit}, credentials) {
     return new Promise((resolve) => {
-      $axios.post('/users/login', {user: credentials})
+      $axios.post('/users/signin', credentials)
       .then(({data}) => {
         commit('SET_AUTH', data.user)
         resolve(data)
       })
       .catch(({response}) => {
-        console.log(response)
+        commit('SET_ERROR', response.data.errors)
       })
     })
   },
-  REGISTER ({commit}, credentials) {
+  SIGNUP ({commit}, credentials) {
     return new Promise((resolve) => {
-      $axios.post('/users', {user: credentials})
+      $axios.post('/users/signup', credentials)
         .then(({data}) => {
           commit('SET_AUTH', data.user)
           resolve(data)
         })
         .catch(({response}) => {
           commit('SET_ERROR', response.data.errors)
-          console.log(response)
         })
     })
   },
@@ -59,8 +59,8 @@ const actions = {
     if (window.localStorage.getItem(TOKEN_ID)) {
       $axios.defaults.headers.common[
         'Authorization'
-      ] = `Token ${window.localStorage.getItem(TOKEN_ID)}`
-      $axios.get('/user',)
+      ] = `Bearer ${window.localStorage.getItem(TOKEN_ID)}`
+      $axios.get('/users/auth')
         .then(({data}) => {
           commit('SET_AUTH', data.user)
         })

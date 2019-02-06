@@ -1,10 +1,11 @@
-const mongoose = requrie('mongoose')
+const mongoose = require('mongoose')
 
 const UserSchema = new mongoose.Schema({
-  username: { type: String, required: true, lowercase: true,  unique: true },
-  email: { type: String, required: true, lowercase: true, unique: true },
+  username: { type: String, required: true },
+  email: { type: String, required: true },
+  password: { type: String, required: true },
   bio: String,
-  image: String,
+  avatar: String,
   favorites: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Article'
@@ -18,5 +19,4 @@ const UserSchema = new mongoose.Schema({
 })
 
 const User = mongoose.model('User', UserSchema)
-
-export default User
+module.exports = User

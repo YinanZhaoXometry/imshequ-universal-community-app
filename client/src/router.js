@@ -47,14 +47,14 @@ export default new Router({
       ]
     },
     {
-      path: '/login',
-      name: 'login',
-      component: () => import('@/views/Login')
+      path: '/signin',
+      name: 'signin',
+      component: () => import('@/views/Signin')
     },
     {
-      path: '/register',
-      name: 'register',
-      component: () => import('@/views/Register')
+      path: '/signup',
+      name: 'signup',
+      component: () => import('@/views/Signup')
     },
     {
       path: '/write',
