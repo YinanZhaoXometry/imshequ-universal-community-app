@@ -20,36 +20,30 @@ const mutations = {
 }
 
 const actions = {
-  ARTICLE_FETCH ({commit}, {articleSlug, prevArticle}) {
-    if (prevArticle !== undefined) {
-      return commit('SET_ARTICLE', prevArticle)
-    }
-    return $axios.get(`/articles/${articleSlug}`)
+  ARTICLE_FETCH ({commit}, id) {
+    return $axios.get(`/articles/${id}`)
     .then(({data}) => {
       commit('SET_ARTICLE', data.article)
       return data.article
     })
   },
   ARTICLE_PUBLISH (context, article) {
-    return $axios.post('/articles', {article})
+    return $axios.post('/articles', article)
   },
-  COMMENTS_FETCH ({commit}, articleSlug) {
-    $axios.get(`/articles/${articleSlug}/comments`)
+  COMMENTS_FETCH ({commit}, articleId) {
+    $axios.get('/comments', { params: {id: articleId} })
     .then(({data}) => {
       commit('SET_COMMENTS', data.comments)
     })
   },
-  COMMENT_CREATE ({dispatch}, { slug, comment }) {
-    $axios.post(`/articles/${slug}/comments`, {
-      comment: { body: comment }
-    }).then(() => {
-      dispatch('COMMENTS_FETCH', slug)
-    })
+  COMMENT_PUBLISH ({dispatch}, { articleId, content }) {
+    $axios.post('/comments', { articleId, content })
+      .then(() => { dispatch('COMMENTS_FETCH', articleId) })
   },
-  COMMENT_DELETE ({dispatch}, {slug, commentId}) {
-    $axios.delete(`/articles/${slug}/comments/${commentId}`)
+  COMMENT_DELETE ({dispatch}, {articleId, commentId}) {
+    $axios.delete(`/comments/${commentId}`, {params: {articleId}})
       .then(() => {
-        dispatch('COMMENTS_FETCH', slug)
+        dispatch('COMMENTS_FETCH', articleId)
       })
   },
   FAVORITE_ADD ({commit}, articleId) {

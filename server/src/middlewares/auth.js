@@ -4,6 +4,17 @@ const jwt = require('jsonwebtoken')
 
 module.exports = {
   authUser (req, res, next) {
+    if (!req.user) {
+      res.status(403).send('请先登录')
+    } else {
+      res.json({user: {
+        id: req.user.id, 
+        username: req.user.username
+      } })
+    }
+  },
+
+  verifyToken (req, res, next) {
     let str = req.headers.authorization
     if (str.startsWith('Bearer') || str.startsWith('Token')) {
       var token = str.split(' ')[1]
@@ -16,18 +27,10 @@ module.exports = {
           res.status(403).send('请先登录')
         } else {
           req.user = decoded
-          console.log(decoded)
-          res.json({user: {
-            id: decoded.id, 
-            username: decoded.username
-          } })
+          next()
         }
       })
     }
-  },
-
-  varifyToken (req, res, next) {
-    console.log(req.headers)
   },
 
   createToken (payload) {

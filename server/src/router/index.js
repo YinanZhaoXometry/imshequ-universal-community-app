@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const user = require('../controllers/user')
-
+const article = require('../controllers/article')
+const comment = require('../controllers/comment')
 const auth  = require('../middlewares/auth')
 
 
@@ -9,13 +10,21 @@ router
     .post('/users/signup', user.signup)
     .post('/users/signin', user.signin)
 
-    .get('/users/auth', auth.authUser)
+    .get('/users/auth', auth.verifyToken, auth.authUser)
     // .get('/user')
     // .put('/user')
 
-    // .get('/articles')
+    // article相关
+    .get('/articles', article.fetchAll)
+    .get('/articles/:id', article.fetchOne)
+    .post('/articles', auth.verifyToken, article.post)
+
+    // comment相关
+    .get('/comments', comment.fetch)
+    .post('/comments', auth.verifyToken, comment.post)
+    .delete('/comments/:id', auth.verifyToken, comment.delete)
+
     // .get('/articles/feed')
-    // .post('/articles')
     // .get('/articles/:article')
     // .put('/articles/:article')
     // .delete('/articles/:article')

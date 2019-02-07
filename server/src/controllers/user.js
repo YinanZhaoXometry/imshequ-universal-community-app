@@ -62,7 +62,6 @@ module.exports = {
     if (!password) 
       errors.push('密码不能为空')
     let userDoc = await User.findOne({email}, null)
-    console.log(userDoc)
     if (!userDoc) {
       errors.push('邮箱未注册')
     } else {

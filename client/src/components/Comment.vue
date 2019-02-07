@@ -18,13 +18,14 @@
       <router-link to="/register">注册</router-link> 
     </p>
     <!-- 评论显示区域 -->
-    <div v-for="(comment, index) in comments" :key="index">
-      <div>{{ comment.body }}</div>
-      <img :src="comment.author.image" alt="">
-      <span>{{ comment.author.username }}</span>
+    <div v-if="comments.length === 0">暂无评论</div>
+    <div v-else v-for="(comment, index) in comments" :key="index">
+      <div v-html="comment.htmlContent" />
+      <img :src="comment.fromWhom.avatar" alt="user avatar">
+      <span>{{ comment.fromWhom.username }}</span>
       <span>{{ comment.createdAt }}</span>
       <span v-if="isCurrentUser(comment)">
-        <button @click="deleteComment(comment.id)">delete</button>
+        <button @click="deleteComment(comment._id)">delete</button>
       </span>
     </div>
   </div>
@@ -39,10 +40,10 @@ export default {
       type: Array,
       required: true
     },
-    slug: {
+    articleId: {
       type: String,
       required: true
-    }
+    },
   },
   data () {
     return {
@@ -56,22 +57,25 @@ export default {
     ...mapGetters(['isAuthenticated']),
   },
   methods: {
+    handleClick () {
+      console.log(this.comments)
+    },
     submitComment () {
-      this.$store.dispatch('COMMENT_CREATE', {
-        slug: this.slug,
-        comment: this.content
+      this.$store.dispatch('COMMENT_PUBLISH', {
+        articleId: this.articleId,
+        content: this.content
       })
       this.content = ''
     },
     deleteComment (commentId) {
       this.$store.dispatch('COMMENT_DELETE', {
-        slug: this.slug,
+        articleId: this.articleId,
         commentId
       })
     },
     isCurrentUser (comment) {
-      if (this.currentUser.username && comment.author.username) {
-        return this.currentUser.username === comment.author.username
+      if (this.currentUser.username && comment.fromWhom.username) {
+        return this.currentUser.username === comment.fromWhom.username
       }
       return false
     }

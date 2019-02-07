@@ -35,7 +35,7 @@ export default {
     return {
       isAuthenticated: true
     }
-  }
+  },
 }
 </script>
 

@@ -21,29 +21,6 @@ export default new Router({
           name: 'feed',
           component: () => import('@/views/HomeMyFeed')
         },
-        // {
-        //   path: 'nodejs',
-        //   name: 'home-nodejs',
-        //   component: () => import('@/views/HomeArticleList')
-        // },
-        // {
-        //   path: 'react',
-        //   name: 'home-react',
-        //   component: () => import('@/views/HomeArticleList')
-        // },
-        // {
-        //   path: 'vue',
-        //   name: 'home-vue',
-        //   component: () => import('@/views/HomeArticleList')
-        // },
-        // {
-        //   path: 'questions',
-        //   name: 'home-questions'
-        // },
-        // {
-        //   path: 'jobs',
-        //   name: 'home-jobs'
-        // }
       ]
     },
     {
@@ -62,7 +39,7 @@ export default new Router({
       component: () => import('@/views/ArticleWrite')
     },
     {
-      path: '/article/:slug',
+      path: '/a/:id',
       name: 'article',
       component: () => import('@/views/Article')
     },

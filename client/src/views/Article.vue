@@ -33,16 +33,13 @@
     </div>
     <!-- 文章正文区域 -->
     <div>
-      <div v-html="article.body" />
+      <div v-html="article.htmlContent" />
       <ul>
         <li v-for="(tag, index) in article.tagList" :key="tag + index">{{ tag }}</li>
       </ul>
     </div>
     <!-- 评论区域 -->
-    <comment 
-      :comments="comments"
-      :slug="article.slug"
-    />
+    <comment :articleId="article._id" :comments="comments" />
   </div>  
 </template>
 
@@ -56,19 +53,21 @@ export default {
     Comment
   },
   beforeRouteEnter (to, from, next) {
+    let id = to.params.id
     Promise.all([
-      store.dispatch('ARTICLE_FETCH', { articleSlug: to.params.slug }),
-      store.dispatch('COMMENTS_FETCH', to.params.slug)
-    ]).then(([article]) => {
-      store.dispatch('FETCH_PROFILE', {username: article.author.username})
-      next()
-    })
+      store.dispatch('ARTICLE_FETCH', id),
+      store.dispatch('COMMENTS_FETCH', id)
+    ]).then(()=>{next()})
+    //   ([article]) => {
+    //   store.dispatch('FETCH_PROFILE', {username: article.author.username})
+    //   next()
+    // })
   },
   computed: {
     ...mapState({
       article: state => state.article.article,
-      comments: state => state.article.comments,
-      profile: state => state.profile.profile
+      profile: state => state.profile.profile,
+      comments: state => state.article.comments
     }),
     ...mapGetters(['isAuthenticated']),
   },
@@ -89,7 +88,7 @@ export default {
         return this.$router.push('/login')
       }
       const actionType = this.article.favorited ? 'FAVORITE_REMOVE' : 'FAVORITE_ADD'
-      this.$store.dispatch(actionType, this.article.slug)
+      this.$store.dispatch(actionType, this.article._id)
     }
   },
   

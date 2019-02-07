@@ -22,8 +22,10 @@ mongoose.connect(config.dbURL, { useNewUrlParser: true })
   .catch(err => console.log('连接数据库失败：'+ err))
 
 app.use(function (err, req, res, next) {
-  const errorCode = err.status || 500
-  console.log(err)
+  console.error(err.stack)
+  let code = err.status || 500
+  let message = code === 500 ? '服务器内部错误' : err.message
+  res.status(code).send(message)
 })
 
 const server = app.listen(process.env.PORT || 3000, function () {

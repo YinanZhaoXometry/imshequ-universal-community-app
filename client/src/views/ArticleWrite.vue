@@ -9,7 +9,7 @@
           <input type="text" placeholder="文章简介" v-model="article.description">
         </fieldset>
         <fieldset>
-          <textarea type="text" placeholder="内容（markdown格式）" rows="8" v-model="article.body" /> 
+          <textarea type="text" placeholder="内容（markdown格式）" rows="8" v-model="article.content" /> 
         </fieldset>
         <fieldset>
           <input type="text" placeholder="标签">
@@ -30,27 +30,35 @@ export default {
       article: {
         title: '',
         description: '',
-        body: ''
+        content: ''
       }
     }
   },
   methods: {
+    checkContents () {
+      let errors = []
+      if (!this.article.title)
+        errors.push('标题')
+      if (!this.article.description)
+        errors.push('简介')
+      if (!this.article.content)
+        errors.push('内容')
+      if (errors.length !== 0) {
+        alert('请填写文章' + errors.join('、') )
+      }
+    },
     onPublish () {
+      this.checkContents()
       this.inProgress = true
       this.$store.dispatch('ARTICLE_PUBLISH', this.article)
       .then(({data}) => {
         this.inProgress = false
-        console.log(data)
-        // this.$route.push({path: '/article', params: {id: data.article.slug}})
+        this.$route.push(`/article/${data.id}`)
       })
       .catch((err)=>{
+        this.inProgress = false
         console.log(err)
       })
-      // .catch(({response}) => {
-      //   this.inProgress = false
-      //   this.errors = response.data.errors
-      //   console.log(response.data.errors)
-      // })
     }
   }
 }

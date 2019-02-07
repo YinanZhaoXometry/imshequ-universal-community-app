@@ -21,7 +21,9 @@ const actions = {
   async FETCH_ARTICLES ({ commit }, params) {
     try {
       commit('SET_LOADING_STATUS', true)
-      let {data} = await $axios.get('/articles'+ (params.type==="feed"?"/feed":""), { params: params.filters })
+      let {data} = await $axios.get(
+        '/articles'+ (params.type==="feed"?"/feed":""), { params: params.filters }
+      )
       commit('SET_ARTICLES', data)
       commit('SET_LOADING_STATUS', false)
     } catch (err) {
