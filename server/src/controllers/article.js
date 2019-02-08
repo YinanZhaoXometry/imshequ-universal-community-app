@@ -17,7 +17,7 @@ module.exports = {
 
   async fetchOne (req, res, next) {
     let _id = req.params.id
-    let doc = await Article.findOne({_id}, '-rawContent').populate('author', '-password')
+    let doc = await Article.findOne({_id}, {}).populate('author', '-password')
     if (doc) {
       res.json({article: doc})
     }
@@ -25,18 +25,45 @@ module.exports = {
 
   async post (req, res, next) {
     let userId = req.user.id
-    let { title, description } = req.body
-    let rawContent = req.body.content
+    let { title, content, description } = req.body
     if ([title, description, rawContent].some( elem => elem.trim() === '' )) {
       let err = new Error('文章信息不完整')
       err.status = 400
       return next(err)
     }
-    let htmlContent = marked(rawContent)
-    let doc = await Article.create({ title, description, rawContent, htmlContent, author: userId })
+    let htmlContent = marked(content)
+    let doc = await Article.create({ title, description, rawContent: content, htmlContent, author: userId })
     if (doc) {
       res.json({id: doc._id})
     }
+  },
 
+  async delete (req, res, next) {
+    try {
+      let _id = req.params.id
+      let result = await Article.deleteOne({_id})
+      if (result.deletedCount !== 0) {
+        res.end()
+      } else {
+        res.status(400).send('删除文章错误')
+      }
+    } catch (err) {
+      next(err)
+    }
+  },
+
+  async update (req, res, next) {
+    try {
+      let _id = req.params.id
+      let {title, content, description} = req.body
+      let htmlContent = marked(content)
+      let doc = await Article.findOne({_id})
+      doc = await doc.set({
+        title, rawContent: content, htmlContent, description
+      }).save()
+      res.json({ id: doc._id })
+    } catch (err) {
+      next(err)
+    }
   }
 }

@@ -7,7 +7,7 @@
 <script>
 import ArticleList from '@/components/ArticleList.vue'
 export default {
-  name: 'UserTabs',
+  name: 'ProfileTabs',
   components: {
     ArticleList
   },

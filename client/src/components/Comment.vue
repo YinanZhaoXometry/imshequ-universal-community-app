@@ -22,8 +22,9 @@
     <div v-else v-for="(comment, index) in comments" :key="index">
       <div v-html="comment.htmlContent" />
       <img :src="comment.fromWhom.avatar" alt="user avatar">
-      <span>{{ comment.fromWhom.username }}</span>
-      <span>{{ comment.createdAt }}</span>
+      <span>{{ comment.fromWhom.username }} </span>
+      <span v-if="isCurrentUser(comment)">作者 </span>
+      <span>{{ comment.createdAt }} </span>
       <span v-if="isCurrentUser(comment)">
         <button @click="deleteComment(comment._id)">delete</button>
       </span>
@@ -42,7 +43,8 @@ export default {
     },
     articleId: {
       type: String,
-      required: true
+      required: true,
+      default: ''
     },
   },
   data () {
@@ -52,7 +54,7 @@ export default {
   },
   computed: {
     ...mapState({
-      currentUser: state => state.auth.user
+      currentUser: state => state.auth.authUser,
     }),
     ...mapGetters(['isAuthenticated']),
   },

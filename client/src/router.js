@@ -39,6 +39,11 @@ export default new Router({
       component: () => import('@/views/ArticleWrite')
     },
     {
+      path: '/write/:id',
+      name: 'article-edit',
+      component: () => import('@/views/ArticleWrite')
+    },
+    {
       path: '/a/:id',
       name: 'article',
       component: () => import('@/views/Article')
@@ -49,18 +54,18 @@ export default new Router({
       component: () => import('@/views/Settings')
     },
     {
-      path: '/u/:username',
-      component: () => import('@/views/User'),
+      path: '/u/:id',
+      component: () => import('@/views/Profile'),
       children: [
         {
           path: '',
           name: 'user-articles',
-          component: () => import('@/views/UserTabs')
+          component: () => import('@/views/ProfileTabs')
         },
         {
           path: 'favorites',
           name: 'user-favorites',
-          component: () => import('@/views/UserTabs')
+          component: () => import('@/views/ProfileTabs')
         }
       ]
     }

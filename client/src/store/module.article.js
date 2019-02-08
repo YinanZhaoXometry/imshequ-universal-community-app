@@ -1,18 +1,24 @@
 import $axios from '../utils/axios'
-const state = {
+
+const initialState = {
   article: {
-    author: {},
     title: '',
     description: '',
-    body: '',
-    tagList: []
+    content: '',
+    author: {},
+    tagList: [],
   },
   comments: []
 }
 
+const state = {...initialState}
+
 const mutations = {
   SET_ARTICLE (state, article) {
     state.article = article
+  },
+  RESET_ARTICLE_STATE (state) {
+    state.article = initialState.article
   },
   SET_COMMENTS (state, comments) {
     state.comments = comments
@@ -29,6 +35,12 @@ const actions = {
   },
   ARTICLE_PUBLISH (context, article) {
     return $axios.post('/articles', article)
+  },
+  ARTICLE_DELETE (context, id) {
+    return $axios.delete(`/articles/${id}`)
+  },
+  ARTICLE_EDIT (context, article) {
+    return $axios.patch(`/articles/${article.id}`, article)
   },
   COMMENTS_FETCH ({commit}, articleId) {
     $axios.get('/comments', { params: {id: articleId} })

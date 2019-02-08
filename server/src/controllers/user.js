@@ -78,5 +78,25 @@ module.exports = {
       let token = auth.createToken(jwtPayload)
       res.json({user:{username: userDoc.username, email, token}})
     }
-  }
+  },
+
+  async fetchOne (req, res, next) {
+    let _id = req.params.id
+    console.log(_id)
+    let result = await User.findOne({_id}, '-password')
+    res.json({profile: result})
+  },
+
+  async updateOne (req, res, next) {
+    let profile = req.body
+    let _id = req.params.id
+    let doc = await User.findOne({_id})
+    doc = await doc.set(profile).save()
+    let jwtPayload = {
+      id: doc._id,
+      username: doc.username
+    }
+    let token = auth.createToken(jwtPayload)
+    res.json({ username: doc.username, id: doc._id, token })
+  }  
 }

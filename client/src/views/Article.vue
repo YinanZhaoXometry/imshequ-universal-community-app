@@ -5,21 +5,25 @@
       <h1>{{ article.title }}</h1>
       <div>
         <img :src="article.author.image" alt="author avatar">
-        <router-link 
-          :to="{name: 'user-articles', params: {username: article.author.username}}"
-        >
-          {{ article.author.username }}
-        </router-link>
+        <template v-if="article.author.username">
+          <router-link 
+            :to="{name: 'user-articles', params: {username: article.author.username}}"
+          >
+            {{ article.author.username }}
+          </router-link>
+        </template>
         <br>
         <span>{{ article.createdAt }}</span>
       </div>
-      <div>
+      <div v-if="isCurrentUser">
+        <button @click="deleteArticle(article)">删除文章</button>
+        <button @click="editArticle(article)">编辑文章</button>
+      </div>
+      <div v-else>
         <button @click="toggleFollow">
           {{ profile.following ? "Unfollow" : "Follow" }}
           {{ article.author.username }}
         </button>
-      </div>
-      <div>
         <button @click="toggleFavorite">
           <span>
             {{ article.favorited ? "取消点赞" : "赞" }}
@@ -27,7 +31,6 @@
           <span>
             ({{ article.favoritesCount }})
           </span>
-          
         </button>
       </div>
     </div>
@@ -57,19 +60,22 @@ export default {
     Promise.all([
       store.dispatch('ARTICLE_FETCH', id),
       store.dispatch('COMMENTS_FETCH', id)
-    ]).then(()=>{next()})
-    //   ([article]) => {
-    //   store.dispatch('FETCH_PROFILE', {username: article.author.username})
-    //   next()
-    // })
+    ]).then(([article]) => {
+      store.dispatch('FETCH_PROFILE', {username: article.author.username})
+      next()
+    })
   },
   computed: {
     ...mapState({
       article: state => state.article.article,
       profile: state => state.profile.profile,
-      comments: state => state.article.comments
+      comments: state => state.article.comments,
+      currentUser: state => state.auth.authUser
     }),
     ...mapGetters(['isAuthenticated']),
+    isCurrentUser () {
+      return this.currentUser.username === this.article.author.username
+    }
   },
   methods: {
     toggleFollow () {
@@ -89,6 +95,21 @@ export default {
       }
       const actionType = this.article.favorited ? 'FAVORITE_REMOVE' : 'FAVORITE_ADD'
       this.$store.dispatch(actionType, this.article._id)
+    },
+    async deleteArticle (article) {
+      try {
+        let isConfirmed = window.confirm("确认要删除文章？")
+        if (isConfirmed) {
+          await this.$store.dispatch('ARTICLE_DELETE', article._id)
+          this.$router.push(`/u/${article.author.username}`)
+          alert('文章删除成功')
+        }
+      } catch ({response}) {
+        alert(response.data)
+      }
+    },
+    editArticle (article) {
+      this.$router.push(`/write/${article._id}`)
     }
   },
   

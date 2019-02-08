@@ -29,12 +29,12 @@ export default {
   computed: {
     ...mapState({
       profile: state => state.profile.profile,
-      user: state => state.auth.user
+      currentUser: state => state.auth.authUser
     }),
     ...mapGetters(['isAuthenticated']),
     isCurrentUser () {
-      if (this.user.username) {
-        return this.user.username === this.profile.username
+      if (this.currentUser.username) {
+        return this.currentUser.username === this.profile.username
       }
       return false
     }

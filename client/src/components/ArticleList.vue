@@ -41,7 +41,8 @@ export default {
     },
     author: {
       type: String,
-      required: false
+      required: false,
+      default: ''
     }
   },
 

@@ -3,7 +3,7 @@ import $axios from '../utils/axios'
 const TOKEN_ID = 'token_id'
 
 const state = {
-  user: {},
+  authUser: {},
   errors: null,
   isAuthenticated: !!window.localStorage.getItem(TOKEN_ID)
 }
@@ -14,14 +14,14 @@ const getters = {
 }
 const mutations = {
   SET_AUTH (state, user) {
-    state.user = user
+    state.authUser = user
     state.isAuthenticated = true
     if(user.token) 
       window.localStorage.setItem(TOKEN_ID, user.token)
   },
   CLEAR_AUTH (state) {
     state.isAuthenticated = false
-    state.user = {}
+    state.authUser = {}
     state.errors = {}
     window.localStorage.removeItem(TOKEN_ID)
   },
@@ -33,7 +33,7 @@ const mutations = {
 const actions = {
   SIGNIN ({commit}, credentials) {
     return new Promise((resolve) => {
-      $axios.post('/users/signin', credentials)
+      $axios.post('/auth/signin', credentials)
       .then(({data}) => {
         commit('SET_AUTH', data.user)
         resolve(data)
@@ -45,7 +45,7 @@ const actions = {
   },
   SIGNUP ({commit}, credentials) {
     return new Promise((resolve) => {
-      $axios.post('/users/signup', credentials)
+      $axios.post('/auth/signup', credentials)
         .then(({data}) => {
           commit('SET_AUTH', data.user)
           resolve(data)
@@ -60,7 +60,7 @@ const actions = {
       $axios.defaults.headers.common[
         'Authorization'
       ] = `Bearer ${window.localStorage.getItem(TOKEN_ID)}`
-      $axios.get('/users/auth')
+      return $axios.get('/auth')
         .then(({data}) => {
           commit('SET_AUTH', data.user)
         })
@@ -70,19 +70,6 @@ const actions = {
     } else {
       commit('CLEAR_AUTH')
     }
-  },
-  UPDATE_USER ({commit}, updatedUser) {
-    const {email, username, password, image, bio} = updatedUser
-    let user = {
-      email,
-      username,
-      image,
-      bio
-    }
-    if (password) user.password = password
-    return $axios.put('/user', user).then(({data}) => {
-      commit('SET_AUTH', data.user)
-    })
   }
 }
 

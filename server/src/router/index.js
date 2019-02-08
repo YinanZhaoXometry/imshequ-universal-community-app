@@ -7,17 +7,20 @@ const auth  = require('../middlewares/auth')
 
 router
     // sign相关
-    .post('/users/signup', user.signup)
-    .post('/users/signin', user.signin)
+    .get('/auth', auth.verifyToken, auth.authUser)
+    .post('/auth/signup', user.signup)
+    .post('/auth/signin', user.signin)
 
-    .get('/users/auth', auth.verifyToken, auth.authUser)
-    // .get('/user')
-    // .put('/user')
+    // user相关
+    .get('/users/:id', user.fetchOne)
+    .patch('/users/:id', auth.verifyToken, user.updateOne)
 
     // article相关
     .get('/articles', article.fetchAll)
     .get('/articles/:id', article.fetchOne)
     .post('/articles', auth.verifyToken, article.post)
+    .patch('/articles/:id', auth.verifyToken, article.update)
+    .delete('/articles/:id', auth.verifyToken, article.delete )
 
     // comment相关
     .get('/comments', comment.fetch)
@@ -27,7 +30,6 @@ router
     // .get('/articles/feed')
     // .get('/articles/:article')
     // .put('/articles/:article')
-    // .delete('/articles/:article')
     // .post('/articles/:article/favorite')
     // .delete('/articles/:article/favorite')
     // .get('/articles/:article/comments')

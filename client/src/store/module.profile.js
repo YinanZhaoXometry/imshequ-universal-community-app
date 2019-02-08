@@ -11,8 +11,8 @@ const mutations = {
 }
 
 const actions = {
-  FETCH_PROFILE ({commit}, {username}) {
-    $axios.get(`/profiles/${username}`)
+  FETCH_PROFILE ({commit}, {id}) {
+    return $axios.get(`/users/${id}`)
       .then(({data}) => {
         commit('SET_PROFILE', data.profile)
       })
@@ -20,11 +20,21 @@ const actions = {
         console.log(err)
       })
   },
+  UPDATE_PROFILE ({commit}, {updatedUser, userId}) {
+    const {email, username, password, avatar, signature} = updatedUser
+    let user = {email, username, password, avatar, signature}
+    for (let key in user) {
+      if (!user[key]) { delete user[key] }
+    }
+    return $axios.patch(`/users/${userId}`, user).then(({data}) => {
+      commit('SET_AUTH', data)
+    })
+  },
   FETCH_PROFILE_FOLLOW ({commit}, payload) {
     const { username } = payload
     return $axios.post(`/profiles/${username}/follow`)
       .then(({data}) => {
-        commit('SET_PROFILE', data.profile)
+        commit('SET_PROFILE', data)
       })
       .catch((err) => {
         console.log(err)

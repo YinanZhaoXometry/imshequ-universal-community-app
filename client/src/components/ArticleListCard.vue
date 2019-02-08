@@ -5,7 +5,7 @@
       <div>
         <img :src="article.author.image" alt="author avatar">
         <router-link 
-          :to="{name: 'user-articles', params: {username: article.author.username}}"
+          :to="{name: 'user-articles', params: {id: article.author._id}}"
         >
           {{ article.author.username }}
         </router-link>
