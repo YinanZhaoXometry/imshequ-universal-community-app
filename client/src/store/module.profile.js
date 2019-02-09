@@ -1,13 +1,18 @@
 import $axios from '../utils/axios'
 const state = {
-  profile: {}
+  profile: {},
 }
 
+const getters = {
+  isFollowing (state, getters, rootState) {
+    return state.profile.followers ? state.profile.followers.includes(rootState.auth.authInfo.id) : false
+  }
+}
 
 const mutations = {
   SET_PROFILE (state, profile) {
     state.profile = profile
-  },
+  }
 }
 
 const actions = {
@@ -30,20 +35,17 @@ const actions = {
       commit('SET_AUTH', data)
     })
   },
-  FETCH_PROFILE_FOLLOW ({commit}, payload) {
-    const { username } = payload
-    return $axios.post(`/profiles/${username}/follow`)
+  FOLLOW ({commit}, {userId, authUserId}) {
+    return $axios.post(`/users/${userId}/follow`, {authUserId})
       .then(({data}) => {
-        commit('SET_PROFILE', data)
+        commit('SET_PROFILE', data.profile)
       })
       .catch((err) => {
         console.log(err)
       })
   },
-  FETCH_PROFILE_UNFOLLOW ({commit}, payload) {
-    console.log('unfollow')
-    const { username } = payload
-    return $axios.delete(`/profiles/${username}/follow`)
+  UNFOLLOW ({commit}, {userId, authUserId}) {
+    return $axios.delete(`/users/${userId}/follow`, {params: {authUserId}})
       .then(({data}) => {
         commit('SET_PROFILE', data.profile)
       })
@@ -55,6 +57,7 @@ const actions = {
 
 export default {
   state,
+  getters,
   mutations,
   actions
 }

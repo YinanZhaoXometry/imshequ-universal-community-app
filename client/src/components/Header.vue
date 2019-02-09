@@ -3,7 +3,7 @@
     <router-link class="site-logo" to="/">i‘m 社区</router-link>
     <ul class="nav">
       <template v-if="isAuthenticated">
-         <li><router-link to="/" @click.prevent.native="logout">退出登录</router-link> </li>
+         <li @click="signout">退出登录</li>
         <li><router-link :to="`/u/${currentUser.id}`">{{ currentUser.username }}</router-link> </li>
         <li><router-link to="/settings">设置</router-link> </li>
         <li><router-link to="/write">写文章</router-link> </li>
@@ -26,11 +26,11 @@ export default {
   computed: {
     ...mapGetters(['isAuthenticated']),
     ...mapState({
-      currentUser: state => state.auth.authUser
+      currentUser: state => state.auth.authInfo
     })
   },
   methods: {
-    logout () {
+    signout () {
       this.$store.commit('CLEAR_AUTH')
       this.$router.push('/')
     }

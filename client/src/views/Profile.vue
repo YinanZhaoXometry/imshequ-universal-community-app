@@ -5,9 +5,11 @@
       <img :src="profile.image" alt="user avatar" style="width:100px;border-radius:50px;">
       <h4>{{ profile.username }}</h4>
       <p>{{ profile.bio }}</p>
+      {{isFollowing}}
       <div v-if="!isCurrentUser">
-        <button @click="unfollow" v-if="profile.following">Unfollow {{ profile.username }}</button>
-        <button @click="follow" v-else>Follow {{ profile.username }}</button>
+        <button @click="toggleFollow">
+          {{ isFollowing ? 取消关注 : 关注 }} {{ profile.username }}
+        </button>
       </div>
     </div>
     <!-- 导航标签区域 -->
@@ -29,24 +31,29 @@ export default {
   computed: {
     ...mapState({
       profile: state => state.profile.profile,
-      currentUser: state => state.auth.authUser
+      authInfo: state => state.auth.authInfo,
     }),
-    ...mapGetters(['isAuthenticated']),
+    ...mapGetters(['isAuthenticated', 'isFollowing']),
     isCurrentUser () {
-      if (this.currentUser.username) {
-        return this.currentUser.username === this.profile.username
+      if (this.authInfo.username) {
+        return this.authInfo.username === this.profile.username
       }
       return false
-    }
+    },
   },
   methods: {
-    follow () {
-      if (!this.isAuthenticated) return 
-      this.$store.dispatch('FETCH_PROFILE_FOLLOW', this.$route.params)
+    toggleFollow () {
+      if (!this.isAuthenticated) {
+        alert('请先登录')
+        return this.$router.push('/login')
+      }
+      const actionType = this.isFollowing ? 'UNFOLLOW' : 'FOLLOW'
+      let payload = {
+        userId: this.$route.params.id,
+        authUserId: this.authInfo.id 
+      }
+      this.$store.dispatch(actionType, payload)
     },
-    unfollow () {
-      this.$store.dispatch('FETCH_PROFILE_UNFOLLOW', this.$route.params)
-    }
   },
   watch: {
     $route (to) {

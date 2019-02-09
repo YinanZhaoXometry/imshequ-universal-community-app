@@ -1,89 +1,10 @@
 const User = require('../models/user')
-const bcrypt = require('bcrypt')
-const auth = require('../middlewares/auth')
-const emailRegExp = /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/
+const auth = require('./auth')
 
 module.exports = {
-  async signup (req, res, next) {
-    try {
-      let errors = []
-      let { username, email, password } = req.body
-      email = email.toLowerCase().trim()
-      username = username.trim()
-      password = password.trim()
-      if (!email) {
-        errors.push('邮箱不能为空') 
-      } else {
-        if (!emailRegExp.test(email)) 
-          errors.push('邮箱不合法')
-      }
-      if (!username) 
-        errors.push('用户名不能为空')
-      if (!password) {
-        errors.push('密码不能为空')
-      } else {
-        if (password.length < 6) 
-          errors.push('密码不能少于6位')
-      }
-      let resultUsername = await User.findOne({username})
-      let resultEmail = await User.findOne({email})
-      if (resultUsername) 
-        errors.push('用户名已存在')
-      if (resultEmail) 
-        errors.push('邮箱已存在')
-      if (errors.length !== 0) {
-        res.status(422).json({errors})
-      } else {
-        let passwordHash = await bcrypt.hash(password, 10)
-        let userDoc = await User.create({
-          username,
-          password: passwordHash,
-          email
-        })
-        let jwtPayload = {
-          id: userDoc._id,
-          username: userDoc.username
-        }
-        let token = auth.createToken(jwtPayload)
-        res.json({user: { username, email, token }})
-      }
-    } catch (err) {
-      next(err)
-    }
-  },
-
-  async signin (req, res, next) {
-    let { email, password } = req.body
-    let errors = []
-    email = email.toLowerCase().trim()
-    password = password.trim()
-    if (!email) 
-      errors.push('邮箱不能为空') 
-    if (!password) 
-      errors.push('密码不能为空')
-    let userDoc = await User.findOne({email}, null)
-    if (!userDoc) {
-      errors.push('邮箱未注册')
-    } else {
-      let isPwdValid = await bcrypt.compare(password, userDoc.password)
-      if (!isPwdValid) errors.push('密码不正确')
-    }
-    if (errors.length !== 0) {
-      res.status(422).json({errors})
-    } else {
-      let jwtPayload = {
-        id: userDoc._id,
-        username: userDoc.username
-      }
-      let token = auth.createToken(jwtPayload)
-      res.json({user:{username: userDoc.username, email, token}})
-    }
-  },
-
   async fetchOne (req, res, next) {
     let _id = req.params.id
-    console.log(_id)
-    let result = await User.findOne({_id}, '-password')
+    let result = await User.findOne({_id}, '-password -following')
     res.json({profile: result})
   },
 
@@ -98,5 +19,51 @@ module.exports = {
     }
     let token = auth.createToken(jwtPayload)
     res.json({ username: doc.username, id: doc._id, token })
-  }  
+  },
+
+  async follow (req, res, next) {
+    let targetUserId = req.params.id
+    let followerId = req.body.authUserId
+    // 把被订阅者（targetUser）加入订阅者（follower）的following名单里
+    let follower = await User.findOne({_id: followerId})
+    if (follower.following.indexOf(targetUserId) !== -1) {
+      return res.sendStatus(400)
+    } else {
+      follower.following.push(targetUserId)
+      await follower.save()
+    }
+    // 把订阅者加入被订阅者的followers名单里
+    let user = await User.findOne({_id: targetUserId})
+    if (user.followers.indexOf(followerId) !== -1) {
+      return res.sendStatus(400)
+    } else {
+      user.followers.push(followerId)
+      user = await user.save()
+      res.json({profile: user})
+    }
+  },
+
+  async unfollow (req, res, next) {
+    let targetUserId = req.params.id
+    let followerId = req.query.authUserId
+    // 把被订阅者（targetUser）从订阅者（follower）的following名单里删除
+    let follower = await User.findOne({_id: followerId})
+    let index = follower.following.indexOf(targetUserId)
+    if (index === -1) {
+      return res.sendStatus(400)
+    } else {
+      follower.following.splice(index, 1)
+      await follower.save()
+    }
+    // 把订阅者从被订阅者的followers名单里删除
+    let user = await User.findOne({_id: targetUserId})
+    let key = user.followers.indexOf(followerId)
+    if (key === -1) {
+      return res.sendStatus(400)
+    } else {
+      user.followers.splice(key, 1)
+      user = await user.save()
+      res.json({profile: user})
+    }
+  }
 }

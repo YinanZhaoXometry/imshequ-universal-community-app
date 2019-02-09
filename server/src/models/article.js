@@ -8,7 +8,7 @@ const ArticleSchema = new mongoose.Schema({
   author: { type: ObjectId, ref: 'User' },
   rawContent: { type: String, required: true },
   htmlContent: { type: String, required: true },
-  favoritesCount: { type: Number, default: 0 },
+  likesCount: { type: Number, default: 0 },
   viewsCount: { type: Number, default: 0 },
   comments: [{ type: ObjectId, ref: 'Comment' }],
   tagList: [{ type: String }],

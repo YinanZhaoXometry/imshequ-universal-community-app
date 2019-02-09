@@ -4,7 +4,7 @@
     <div>
       <h1>{{ article.title }}</h1>
       <div>
-        <img :src="article.author.image" alt="author avatar">
+        <img :src="article.author.avatar" alt="author avatar">
         <template v-if="article.author.username">
           <router-link 
             :to="{name: 'user-articles', params: {username: article.author.username}}"
@@ -21,16 +21,11 @@
       </div>
       <div v-else>
         <button @click="toggleFollow">
-          {{ profile.following ? "Unfollow" : "Follow" }}
+          {{ isFollowing ? "取消关注" : "关注" }}
           {{ article.author.username }}
         </button>
-        <button @click="toggleFavorite">
-          <span>
-            {{ article.favorited ? "取消点赞" : "赞" }}
-          </span>
-          <span>
-            ({{ article.favoritesCount }})
-          </span>
+        <button @click="toggleLike">
+            {{ article.favorited ? "取消点赞" : "赞" }}（{{ article.favoritesCount }}）
         </button>
       </div>
     </div>
@@ -42,6 +37,7 @@
       </ul>
     </div>
     <!-- 评论区域 -->
+    {{article}}
     <comment :articleId="article._id" :comments="comments" />
   </div>  
 </template>
@@ -61,7 +57,7 @@ export default {
       store.dispatch('ARTICLE_FETCH', id),
       store.dispatch('COMMENTS_FETCH', id)
     ]).then(([article]) => {
-      store.dispatch('FETCH_PROFILE', {username: article.author.username})
+      store.dispatch('FETCH_PROFILE', {id: article.author._id})
       next()
     })
   },
@@ -70,9 +66,9 @@ export default {
       article: state => state.article.article,
       profile: state => state.profile.profile,
       comments: state => state.article.comments,
-      currentUser: state => state.auth.authUser
+      currentUser: state => state.auth.authInfo
     }),
-    ...mapGetters(['isAuthenticated']),
+    ...mapGetters(['isAuthenticated', 'isFollowing']),
     isCurrentUser () {
       return this.currentUser.username === this.article.author.username
     }
@@ -80,20 +76,22 @@ export default {
   methods: {
     toggleFollow () {
       if (!this.isAuthenticated) {
+        alert('请先登录')
         return this.$router.push('/login')
       }
-      const actionType = this.profile.following
-        ? 'FETCH_PROFILE_UNFOLLOW'
-        : 'FETCH_PROFILE_FOLLOW'
-      this.$store.dispatch(actionType, {
-        username: this.article.author.username
-      })
+      const actionType = this.isFollowing ? 'UNFOLLOW' : 'FOLLOW'
+      let payload = {
+        userId: this.profile._id,
+        authUserId: this.currentUser.id 
+      }
+      this.$store.dispatch(actionType, payload)
     },
-    toggleFavorite () {
+    toggleLike () {
       if (!this.isAuthenticated) {
+        alert('请先登录')
         return this.$router.push('/login')
       }
-      const actionType = this.article.favorited ? 'FAVORITE_REMOVE' : 'FAVORITE_ADD'
+      const actionType = this.article.favorited ? 'UNLIKE' : 'LIKE'
       this.$store.dispatch(actionType, this.article._id)
     },
     async deleteArticle (article) {

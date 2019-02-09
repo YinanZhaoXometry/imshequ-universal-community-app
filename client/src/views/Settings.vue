@@ -31,11 +31,11 @@ export default {
   },
   computed: {
     userId () {
-      return this.$store.state.auth.authUser.id
+      return this.$store.state.auth.authInfo.id
     }
   },
   async beforeRouteEnter (to, from, next) {
-    let id = store.state.auth.authUser.id
+    let id = store.state.auth.authInfo.id
     await store.dispatch('FETCH_PROFILE', {id})
     next()
   },

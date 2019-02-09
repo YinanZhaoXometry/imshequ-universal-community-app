@@ -13,6 +13,12 @@ const initialState = {
 
 const state = {...initialState}
 
+const getters = {
+  isLiked (state) {
+    // return state.article.author
+  }
+}
+
 const mutations = {
   SET_ARTICLE (state, article) {
     state.article = article
@@ -58,16 +64,22 @@ const actions = {
         dispatch('COMMENTS_FETCH', articleId)
       })
   },
-  FAVORITE_ADD ({commit}, articleId) {
-    $axios.post(`/articles/${articleId}/favorite`)
+  LIKE ({commit}, articleId) {
+    $axios.post(`/articles/${articleId}/like`)
       .then(({data}) => {
         commit('SET_ARTICLE', data.article)
       })
+      .catch(({response}) => {
+        console.log(response.data)
+      })
   },
-  FAVORITE_REMOVE ({commit}, articleId) {
-    $axios.delete(`/articles/${articleId}/favorite`)
+  UNLIKE ({commit}, articleId) {
+    $axios.delete(`/articles/${articleId}/like`)
       .then(({data}) => {
         commit('SET_ARTICLE', data.article)
+      })
+      .catch(({response}) => {
+        console.log(response.data)
       })
   }
 
@@ -75,6 +87,7 @@ const actions = {
 
 export default {
   state,
+  getters,
   mutations,
   actions
 }

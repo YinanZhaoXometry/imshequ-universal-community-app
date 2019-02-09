@@ -10,11 +10,10 @@ module.exports = {
     let countQuery = Article.countDocuments({})
     let articlesQuery = Article.find({}, '-rawContent -htmlContent', {
       sort: {createdAt: -1}, limit, skip: offset
-    }).populate('author')
+    }).populate('author', '-password')
     let [ articlesCount, articles ] = await Promise.all([ countQuery, articlesQuery ])
     res.json({ articlesCount, articles })
   },
-
   async fetchOne (req, res, next) {
     let _id = req.params.id
     let doc = await Article.findOne({_id}, {}).populate('author', '-password')
@@ -22,7 +21,6 @@ module.exports = {
       res.json({article: doc})
     }
   },
-
   async post (req, res, next) {
     let userId = req.user.id
     let { title, content, description } = req.body
@@ -37,7 +35,6 @@ module.exports = {
       res.json({id: doc._id})
     }
   },
-
   async delete (req, res, next) {
     try {
       let _id = req.params.id
@@ -51,7 +48,6 @@ module.exports = {
       next(err)
     }
   },
-
   async update (req, res, next) {
     try {
       let _id = req.params.id
@@ -62,6 +58,43 @@ module.exports = {
         title, rawContent: content, htmlContent, description
       }).save()
       res.json({ id: doc._id })
+    } catch (err) {
+      next(err)
+    }
+  },
+  async like (req, res, next) {
+    try {
+      let articleId = req.params.id
+      // 将文章加入用户的like历史清单
+      
+
+      let userId = req.user.id
+      let user = await User.findById(userId)
+      if ( user.liked.indexOf(articleId) !== -1 ) { 
+        res.sendStatus(400)
+      } else {
+        user.liked.push(articleId)
+        await user.save()
+      }
+
+      // 更新文章的like数
+      let result = await Article.updateOne( {_id: articleId}, { $inc: {likesCount: 1} } )
+      if (result.nModified !== 0) {
+        let article = await Article.findById(articleId)
+          .populate('author', '-password')
+
+        User.addLiked(articleId)
+        article.isLiked = User.checkLiked(articleId) ? true : false 
+
+        res.json({article})
+      }
+    } catch (err) {
+      next(err)
+    }
+  },
+  async unlike (req, res, next) {
+    try {
+      
     } catch (err) {
       next(err)
     }

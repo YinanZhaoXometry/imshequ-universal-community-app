@@ -3,7 +3,8 @@ import $axios from '../utils/axios'
 const TOKEN_ID = 'token_id'
 
 const state = {
-  authUser: {},
+  authInfo: {},
+  user: {},
   errors: null,
   isAuthenticated: !!window.localStorage.getItem(TOKEN_ID)
 }
@@ -13,18 +14,20 @@ const getters = {
   },
 }
 const mutations = {
-  SET_AUTH (state, user) {
-    state.authUser = user
+  SET_AUTH (state, authInfo) {
+    state.authInfo = authInfo
     state.isAuthenticated = true
-    if(user.token) 
-      window.localStorage.setItem(TOKEN_ID, user.token)
+    if(authInfo.token) 
+      window.localStorage.setItem(TOKEN_ID, authInfo.token)
   },
   CLEAR_AUTH (state) {
     state.isAuthenticated = false
-    state.authUser = {}
+    state.authInfo = {}
     state.errors = {}
+    console.log(state)
     window.localStorage.removeItem(TOKEN_ID)
   },
+
   SET_ERROR (state, errors) {
     state.errors = errors
   },
