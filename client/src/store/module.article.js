@@ -13,12 +13,6 @@ const initialState = {
 
 const state = {...initialState}
 
-const getters = {
-  isLiked (state) {
-    // return state.article.author
-  }
-}
-
 const mutations = {
   SET_ARTICLE (state, article) {
     state.article = article
@@ -64,7 +58,7 @@ const actions = {
         dispatch('COMMENTS_FETCH', articleId)
       })
   },
-  LIKE ({commit}, articleId) {
+  TOGGLE_LIKE ({commit}, articleId) {
     $axios.post(`/articles/${articleId}/like`)
       .then(({data}) => {
         commit('SET_ARTICLE', data.article)
@@ -73,21 +67,10 @@ const actions = {
         console.log(response.data)
       })
   },
-  UNLIKE ({commit}, articleId) {
-    $axios.delete(`/articles/${articleId}/like`)
-      .then(({data}) => {
-        commit('SET_ARTICLE', data.article)
-      })
-      .catch(({response}) => {
-        console.log(response.data)
-      })
-  }
-
 }
 
 export default {
   state,
-  getters,
   mutations,
   actions
 }

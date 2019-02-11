@@ -45,7 +45,7 @@ export default {
     toggleFollow () {
       if (!this.isAuthenticated) {
         alert('请先登录')
-        return this.$router.push('/login')
+        return this.$router.push('/signin')
       }
       const actionType = this.isFollowing ? 'UNFOLLOW' : 'FOLLOW'
       let payload = {

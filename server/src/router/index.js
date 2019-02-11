@@ -19,12 +19,11 @@ router
 
     // article相关
     .get('/articles', article.fetchAll)
-    .get('/articles/:id', article.fetchOne)
+    .get('/articles/:id', auth.optionalVerify, article.fetchOne)
     .post('/articles', auth.verifyToken, article.post)
     .patch('/articles/:id', auth.verifyToken, article.update)
-    .delete('/articles/:id', auth.verifyToken, article.delete)
-    .post('/articles/:id/like', auth.verifyToken, article.like)
-    .delete('/articles/:id/like', auth.verifyToken, article.unlike)
+    .delete('/articles/:id', auth.verifyToken, article.deleteOne)
+    .post('/articles/:id/like', auth.verifyToken, article.toggleLike)
 
     // comment相关
     .get('/comments', comment.fetch)

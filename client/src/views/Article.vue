@@ -25,7 +25,7 @@
           {{ article.author.username }}
         </button>
         <button @click="toggleLike">
-            {{ article.favorited ? "取消点赞" : "赞" }}（{{ article.favoritesCount }}）
+            {{ article.isLiked ? "取消点赞" : "赞" }}（{{ article.likesCount }}）
         </button>
       </div>
     </div>
@@ -36,8 +36,11 @@
         <li v-for="(tag, index) in article.tagList" :key="tag + index">{{ tag }}</li>
       </ul>
     </div>
+    <!-- 文章元数据区域 -->
+    <div>
+      <span>阅读：{{ article.viewsCount }}</span>
+    </div>
     <!-- 评论区域 -->
-    {{article}}
     <comment :articleId="article._id" :comments="comments" />
   </div>  
 </template>
@@ -77,7 +80,7 @@ export default {
     toggleFollow () {
       if (!this.isAuthenticated) {
         alert('请先登录')
-        return this.$router.push('/login')
+        return this.$router.push('/signin')
       }
       const actionType = this.isFollowing ? 'UNFOLLOW' : 'FOLLOW'
       let payload = {
@@ -89,10 +92,10 @@ export default {
     toggleLike () {
       if (!this.isAuthenticated) {
         alert('请先登录')
-        return this.$router.push('/login')
+        return this.$router.push('/signin')
       }
-      const actionType = this.article.favorited ? 'UNLIKE' : 'LIKE'
-      this.$store.dispatch(actionType, this.article._id)
+      // const actionType = this.article.favorited ? 'UNLIKE' : 'LIKE'
+      this.$store.dispatch('TOGGLE_LIKE', this.article._id)
     },
     async deleteArticle (article) {
       try {

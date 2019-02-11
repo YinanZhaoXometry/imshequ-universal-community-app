@@ -13,9 +13,9 @@
     </form>
     <p v-else>
       添加评论需先 
-      <router-link to="/login">登陆</router-link> 
+      <router-link to="/signin">登陆</router-link> 
       或
-      <router-link to="/register">注册</router-link> 
+      <router-link to="/signup">注册</router-link> 
     </p>
     <!-- 评论显示区域 -->
     <div v-if="comments.length === 0">暂无评论</div>
