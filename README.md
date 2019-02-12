@@ -1,7 +1,7 @@
 # i'm社区 
 
 ### 网址：
-http://imshequ.me
+http://imshequ.me (域名已经购买，项目目前还未部署，目前项目已处于最后阶段）
 
 ### 简介：
 一个基于vue全家桶-express-mongodb的社区模板，采用前后端分离开发，类似简书和medium。
