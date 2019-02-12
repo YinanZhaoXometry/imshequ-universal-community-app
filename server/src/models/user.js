@@ -15,6 +15,9 @@ const UserSchema = new mongoose.Schema({
   following: [{ type: ObjectId, ref: 'User' }],
   followers: [{ type: ObjectId, ref: 'User' }],
   isBlocked: { type: Boolean, default: false },
+
+  aritcles: [],
+  comments: [],
   // blockedUsers: [{ type: ObjectId, ref: 'User' }],
 })
 

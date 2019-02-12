@@ -5,10 +5,9 @@
       <img :src="profile.image" alt="user avatar" style="width:100px;border-radius:50px;">
       <h4>{{ profile.username }}</h4>
       <p>{{ profile.bio }}</p>
-      {{isFollowing}}
       <div v-if="!isCurrentUser">
         <button @click="toggleFollow">
-          {{ isFollowing ? 取消关注 : 关注 }} {{ profile.username }}
+          {{ isFollowing ? '取消关注' : '关注' }} {{ profile.username }}
         </button>
       </div>
     </div>
@@ -17,6 +16,7 @@
       <ul class="user-tabs clearfix">
         <li><router-link :to="{name: 'user-articles'}">我的文章</router-link></li>
         <li><router-link :to="{name: 'user-favorites'}">我的收藏</router-link></li>
+        <li><router-link :to="{name: 'user-notifications'}">收到的评论</router-link></li>
       </ul>
     </div>
     <!-- 文章列表区域 -->

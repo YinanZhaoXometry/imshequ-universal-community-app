@@ -1,5 +1,6 @@
 const Comment = require('../models/comment')
 const Article = require('../models/article')
+const Notification = require('../models/notification')
 const marked = require('marked')
 
 module.exports = {
@@ -30,8 +31,13 @@ module.exports = {
       let userId = req.user.id
       let rawContent = content
       let htmlContent = marked(rawContent)
-      let doc = await Comment.create({ article: articleId, rawContent, htmlContent, fromWhom: userId })
-      await Article.updateOne({ _id: articleId }, { $push: {comments: doc._id} })
+      let comment = await Comment.create({ article: articleId, rawContent, htmlContent, fromWhom: userId })
+      let article = await Article.findOne({ _id: articleId })
+      article.comments.push(comment._id)
+      await article.save()
+      Notification.create({
+        type: 'comment', htmlContent, toWhom: article.author, fromWhom: userId, article: articleId
+      }) // 创建notification
       res.end()
     } catch (err) {
       next(err)

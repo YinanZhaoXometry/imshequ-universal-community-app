@@ -3,7 +3,7 @@ const user = require('../controllers/user')
 const article = require('../controllers/article')
 const comment = require('../controllers/comment')
 const auth  = require('../controllers/auth')
-const profile = require('../controllers/user')
+const notification = require('../controllers/notification')
 
 router
     // auth相关
@@ -16,6 +16,7 @@ router
     .patch('/users/:id', auth.verifyToken, user.updateOne)
     .post('/users/:id/follow', auth.verifyToken, user.follow)
     .delete('/users/:id/follow', auth.verifyToken, user.unfollow)
+    // .get('/users/:id/comments', auth.verifyToken, user.fetchComments )
 
     // article相关
     .get('/articles', article.fetchAll)
@@ -30,17 +31,8 @@ router
     .post('/comments', auth.verifyToken, comment.post)
     .delete('/comments/:id', auth.verifyToken, comment.delete)
 
-    // .get('/articles/feed')
-    // .get('/articles/:article')
-    // .put('/articles/:article')
-
-    // .get('/articles/:article/comments')
-    // .post('/articles/:article/comments')
-    // .delete('/articles/:article/comments/:comment')
-
-    // .get('/profiles/:username')
-    // .post('/profiles/:username/follow')
-    // .delete('/profiles/:username/follow')
+    // 通知相关
+    .get('/notifications/', auth.verifyToken, notification.fetch)
 
     // .get('/tags')
 

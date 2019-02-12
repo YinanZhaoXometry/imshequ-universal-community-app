@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Schema.Types.ObjectId
 
 const ArticleSchema = new mongoose.Schema({
-  // slug: { type: String, lowercase: true, unique: true },
   title: { type: String, required: true },
   description: { type: String },
   author: { type: ObjectId, ref: 'User' },
@@ -17,8 +16,6 @@ const ArticleSchema = new mongoose.Schema({
   isPublished: { type: Boolean },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
-
-
 })
 
 const Article = mongoose.model('Article', ArticleSchema)

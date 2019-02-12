@@ -45,7 +45,7 @@ async function checkLiked (userId, articleId) {
 async function post (req, res, next) {
   let userId = req.user.id
   let { title, content, description } = req.body
-  if ([title, description, rawContent].some( elem => elem.trim() === '' )) {
+  if ([title, description, content].some( elem => elem.trim() === '' )) {
     let err = new Error('文章信息不完整')
     err.status = 400
     return next(err)

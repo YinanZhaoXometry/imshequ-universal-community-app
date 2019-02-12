@@ -65,5 +65,9 @@ module.exports = {
       user = await user.save()
       res.json({profile: user})
     }
+  },
+
+  async fetchComments (req, res, next) {
+    
   }
 }

@@ -52,7 +52,11 @@ const actions = {
       .catch((err) => {
         console.log(err)
       })
+  },
+  FETCH_NOTIFICATIONS (context, payload) {
+    $axios.get('/notifications', { params: payload })
   }
+
 }
 
 export default {
