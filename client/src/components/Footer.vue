@@ -1,12 +1,17 @@
 <template>
-  <div>
-    <p>imshequ.me | All Rights Reserved © 2019</p>
+  <div class="footer-container">
+    <div class="footer-menu" @click="handleClick">Fork on GitHub</div>
+    <div class="footer-note">imSheQu. All Rights Reserved © 2019</div>
   </div>
 </template>
 
 <script>
 export default {
-  
+  methods: {
+    handleClick () {
+      window.open('https://github.com/zhaoyn7/imshequ-universal-community-app', '_blank')
+    }
+  }
 }
 </script>
 

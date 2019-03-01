@@ -1,29 +1,33 @@
 <template>
-  <div>
-    <div>
-      <h1>i'm 社区</h1>
-      <p>一个快速社区生成模板</p>
+  <div class="clearfix">
+    <div class="banner-container">
+      <div class="banner-background"></div>
+      <div class="banner-text">
+        <h1>i'm 社区</h1>
+        <h3>一个快速社区生成模板</h3>
+      </div>
     </div>
-    <div>
+    <div class="left-container">
+      <el-carousel :interval="5000" arrow="hover">
+        <el-carousel-item v-for="item in 4" :key="item">
+          <h3>{{ item }}</h3>
+        </el-carousel-item>
+      </el-carousel>
       <div>
         <ul class="nav-tabs clearfix">
           <li v-if="isAuthenticated"><router-link to="/myfeed">我的订阅</router-link></li>
           <li><router-link to="/">全部</router-link></li>
-          <!-- <li><router-link to="/nodejs">nodejs</router-link></li>
-          <li><router-link to="/vue">Vue</router-link></li>
-          <li><router-link to="/react">React</router-link></li>
-          <li><router-link to="/questions">问答</router-link></li>
-          <li><router-link to="/jobs">招聘</router-link></li> -->
         </ul>
       </div>
       <router-view></router-view>
     </div>
-    <br>
-    <div v-if="isAuthenticated">
-      <h4>用户信息</h4>
-    </div>
-    <div>
-      <h4>热门文章</h4>
+    <div class="right-container">
+      <div v-if="isAuthenticated">
+        <h4>用户信息</h4>
+      </div>
+      <div>
+        <h4>热门文章</h4>
+      </div>
     </div>
   </div>
 </template>
