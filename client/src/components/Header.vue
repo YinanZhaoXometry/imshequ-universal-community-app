@@ -1,5 +1,5 @@
 <template>
-  <nav class="clearfix">
+  <nav class="clearfix header-container">
     <router-link class="site-logo" to="/">i‘m 社区</router-link>
     <ul class="nav">
       <template v-if="isAuthenticated">
