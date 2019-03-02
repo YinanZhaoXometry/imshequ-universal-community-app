@@ -1,0 +1,72 @@
+@import 'variables.less';
+
+// App.vue
+#app {
+  height: 100vh;
+  // overflow: hidden;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+
+// Header.vue
+.header-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 70px;
+  width: 100%;
+  padding: 0 30px;
+  padding-top: 10px;
+  z-index: 1000;
+  .site-logo {
+    float:left;
+    padding: 0;
+    line-height: 70px;
+    height: 70px;
+    width: 70px;
+    font-size: 16px;
+    font-weight: bold;
+    z-index: 100;
+    border-radius: 35px;
+    background: #fff;
+    border: 1px solid #000;
+  }
+  .site-logo a {
+    display: block;
+    color: rgba(0,0,0,0.9);
+  }
+  .site-logo:hover a{
+    color: @color-site-logo;
+  }
+  .site-logo:hover {
+    border: 1px solid @color-site-logo;
+  }
+}
+
+
+// Footer.vue
+.footer-container {
+  .footer-menu {
+    height: 80px;
+    color:#fff;
+    font-weight: bold;
+    font-size: 20px;
+    background: #293039;
+    vertical-align: middle;
+    line-height: 80px;
+  }
+  .footer-menu:hover {
+    color: @color-theme;
+    cursor: pointer;
+  }
+  .footer-note {
+    height: 80px;
+    background: #21262E;
+    color:#73787E;
+    vertical-align: middle;
+    line-height: 80px;
+  }
+}

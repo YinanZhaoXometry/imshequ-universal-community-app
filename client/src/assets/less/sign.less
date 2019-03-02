@@ -1,14 +1,38 @@
 .sign-container {
   width: 100%;
-  min-height: 900px;
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-
+  height: calc(100% - 160px);
+  .sign-background {
+    background-image:url(/sign_bg.db29b0fb.png);
+    background-size: cover;
+    background-position: 50% 50%;
+    background-repeat: repeat;
+    height: 100%;
+  }
+  .sign-background:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 160px;
+    left: 0;
+    right: 0;
+    background: rgba(14,19,24,.8);
+  }
+  .flex-container {
+    display: flex;
+    height: 100%;
+    position: relative;
+    align-items: center;
+    z-index: 100;
+  }
   .sign-card {
+    position: relative;
+    margin: 0 auto;
+    padding: 20px;
     width: 500px;
     min-height: 500px;
+  }
+  .sign-title {
+    margin-bottom: 20px;
   }
   .btn-text {
     font-size: 16px;

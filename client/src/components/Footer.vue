@@ -1,8 +1,8 @@
 <template>
-  <div class="footer-container">
+  <footer class="footer-container">
     <div class="footer-menu" @click="handleClick">Fork on GitHub</div>
     <div class="footer-note">imSheQu. All Rights Reserved © 2019</div>
-  </div>
+  </footer>
 </template>
 
 <script>

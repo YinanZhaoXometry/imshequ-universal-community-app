@@ -1,23 +1,31 @@
 @import 'variables.less';
+@import 'public.less';
 @import 'sign.less';
 @import 'home.less';
+@import 'article-list.less';
 
 // 一些全局样式 Some global styles
 
 html * {
   padding: 0;
   margin: 0;
-  height: 100%;
 }
-
 a {
   text-decoration: none;
 }
-
 * {
   box-sizing: border-box;
 }
-
 li {
   list-style: none;
+}
+html,body {
+	height: 100%;
+}
+.clearfix:after {
+  clear: both;
+  content: "";
+  display: block;
+  height: 0;
+  visibility: hidden;
 }

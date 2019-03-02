@@ -5,12 +5,14 @@
       <div v-if="articles.length === 0">
         暂无文章
       </div>
-      <article-card 
+      <ul>
+        <article-card 
         v-for="(article, index) in articles" 
         :key="article.title + index" 
         :article="article"
       >
       </article-card>
+      </ul>
       <pagination :pages="pages" :currentPage.sync="currentPage" />
     </div>
   </div>  
@@ -71,11 +73,9 @@ export default {
     }),
     pages () {
       if (this.isLoading || this.articleCount <= this.itemsPerPage) {
-        return []
+        return null
       }
-      return [
-        ...Array(Math.ceil(this.articlesCount / this.itemsPerPage)).keys()
-      ].map(e => e+1)
+      return Math.ceil(this.articlesCount / this.itemsPerPage)
     }
   },
 

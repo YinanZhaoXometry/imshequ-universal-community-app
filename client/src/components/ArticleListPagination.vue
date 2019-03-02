@@ -1,22 +1,19 @@
 <template>
-  <div>
-    <ul>
-      <li 
-        v-for="page in pages" 
-        :key="page" 
-        @click="changePage(page)"
-      >
-        {{page}}
-      </li>
-    </ul>
-  </div>
+  <el-pagination
+    class="pagination"
+    background
+    layout="prev, pager, next"
+    :total="pages"
+    @current-change="changePage"
+  >
+  </el-pagination>
 </template>
 
 <script>
 export default {
   props: {
     pages: {
-      type: Array,
+      type: Number,
       required: true
     },
     currentPage: {
@@ -26,19 +23,9 @@ export default {
   },
 
   methods: {
-    changePage (goToPage) {
-      if (goToPage === this.currentPage) return
+    changePage(goToPage) {
       this.$emit('update:currentPage', goToPage)
     }
   }
 }
 </script>
-
-<style>
-li {
-  float: left;
-  list-style: none;
-  padding: 5px;
-  cursor: pointer;
-}
-</style>

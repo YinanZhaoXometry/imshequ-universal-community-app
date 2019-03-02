@@ -1,5 +1,5 @@
 <template>
-  <nav class="clearfix header-container">
+  <header class="clearfix header-container">
     <ul class="nav-btns">
       <li class="site-logo"><router-link to="/">i‘m社区</router-link></li>
       <template v-if="isAuthenticated">
@@ -15,7 +15,7 @@
         <li><router-link to="/">首页</router-link> </li>
       </template>
     </ul>
-  </nav>
+  </header>
 </template>
 
 <script>

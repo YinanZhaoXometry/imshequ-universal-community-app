@@ -1,23 +1,28 @@
 <template>
   <div class="sign-container">
-    <el-card class="sign-card">
-      <h1>注册</h1>
-      <router-link to="/signin">
-        <el-button type="text" class="btn-text">需要登陆？</el-button>
-      </router-link>
-      <ul>
-        <li v-for="(error,key) in errors" :key="key">
-          {{error}}
-        </li>
-      </ul>
-      <form>
-          <el-input placeholder="请输入邮箱" v-model="email" class="signup-input" />
-          <el-input placeholder="请输入用户名" v-model="username" class="signup-input" />
-          <el-input placeholder="请输入密码" v-model="password" class="signup-input" />
-          <el-input placeholder="请再次输入密码" v-model="passwordRepeat" class="signup-input" />
-          <el-button type="primary" @click="onSubmit" class="btn-main">注册</el-button>
-      </form>
-    </el-card>
+    <div class="sign-background">
+      <div class="flex-container">
+        <el-card class="sign-card">
+          <h1 class="sign-title">注册</h1>
+          <ul>
+            <li v-for="(error,key) in errors" :key="key">
+              {{error}}
+            </li>
+          </ul>
+          <form>
+            <el-input placeholder="请输入邮箱" v-model="email" class="signup-input" />
+            <el-input placeholder="请输入用户名" v-model="username" class="signup-input" />
+            <el-input placeholder="请输入密码" v-model="password" class="signup-input" />
+            <el-input placeholder="请再次输入密码" v-model="passwordRepeat" class="signup-input" />
+            <el-button type="primary" @click="onSubmit" class="btn-main">注册</el-button>
+          </form>
+          <span>已有账号？</span>
+          <router-link to="/signin">
+            <el-button type="text" class="btn-text">去登陆</el-button>
+          </router-link>
+        </el-card>
+      </div>
+    </div>
   </div>
 </template>
 

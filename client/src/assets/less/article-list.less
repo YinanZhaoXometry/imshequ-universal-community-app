@@ -1,0 +1,81 @@
+@import 'variables.less';
+
+// ========================================
+// ArticleCard.vue
+
+.article-card-container a {
+  color: @color-link;
+}
+.article-card-container a:hover {
+  color: @color-link-hover;
+}
+.article-card-container {
+  height: 165px;
+  border-bottom: 1px solid @gray-light3;
+  padding: 15px 15px;
+  position: relative;
+}
+.article-meta {
+  height: 32px;
+  text-align: left;
+
+  .user-avatar {
+    border-radius: 50%;
+    height: 32px;
+  }
+  .user-info {
+    vertical-align: top;
+    line-height: 32px;
+    height: 32px;
+    width: 200px;
+    display: inline-block;
+    margin-left: 10px;
+  }
+  .user-name {
+    display: block;
+    color: @color-theme;
+    font-weight: 500;
+    font-size: 1rem;
+    height: 16px;
+    line-height: 16px;
+  }
+  .date {
+    display: block;
+    height: 16px;
+    line-height: 16px;
+    font-size: 0.8rem;
+    color: @gray;
+    margin-top: 1px;
+  }
+}
+.article-cover {
+  position: absolute;
+  right: 0;
+  top: 10px;
+  display:block;
+  width: 165px;
+  height: 50px;
+}
+.article-cover>img {
+  width: 140px;
+  border-radius: 5px;
+}
+.article-content {
+  padding-right: 165px;
+  margin-top: 5px;
+  text-align: left;
+  .article-title {
+    font-size: 1.2rem;
+  }
+  .article-desc {
+    margin-top: 5px;
+    color: @gray;
+    font-size: 0.9rem;
+  }
+}
+
+// ================
+// 分页器
+.pagination {
+  margin-top: 20px;
+}
